@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ML Final Project: Will this student pass?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+:root{--bg:#F2F5F9;--ink:#15213B;--mute:#52607A;--line:#CBD5E3;--card:#FFFFFF;--a:#1F6F8B;--b:#C77C0E;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#101826;--ink:#E8EDF5;--mute:#9AA9C2;--line:#2B3A55;--card:#17223A;--a:#5BB5D3;--b:#F0B24A}}
+:root[data-theme="dark"]{--bg:#101826;--ink:#E8EDF5;--mute:#9AA9C2;--line:#2B3A55;--card:#17223A;--a:#5BB5D3;--b:#F0B24A}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--ink);font-family:"IBM Plex Sans",system-ui,sans-serif;font-size:clamp(16px,1.6vw,21px);line-height:1.5;display:flex;flex-direction:column}
+.deck{flex:1;min-height:0;overflow-y:auto;padding:clamp(20px,5vw,64px) clamp(20px,7vw,110px)}
+.slide{display:none;max-width:1000px;margin:0 auto}
+.slide.on{display:block}
+h1,h2{font-family:"Bricolage Grotesque",system-ui,sans-serif;line-height:1.05;margin:0 0 .5em;letter-spacing:-.02em}
+h1{font-size:clamp(38px,7vw,88px);font-weight:800}
+h2{font-size:clamp(28px,4.2vw,52px);font-weight:700}
+h3{font-family:"Bricolage Grotesque",system-ui,sans-serif;font-size:1.1em;margin:0 0 .3em}
+.sub{color:var(--mute);max-width:36em}
+.q{border-left:6px solid var(--b);padding-left:18px;margin:1.2em 0}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px}
+.box{background:var(--card);border:1px solid var(--line);border-left:5px solid var(--a);border-radius:6px;padding:16px 18px}
+.box.b{border-left-color:var(--b)}
+.box p{margin:.2em 0;color:var(--mute)}
+.tw{overflow-x:auto}
+table{border-collapse:collapse;width:100%;min-width:520px;background:var(--card)}
+th,td{text-align:left;padding:8px 12px;border-bottom:1px solid var(--line);font-size:.9em}
+th{font-weight:600;border-bottom:2px solid var(--ink)}
+code{font-family:ui-monospace,Menlo,monospace;font-size:.9em;color:var(--a)}
+ul{padding-left:1.2em;margin:.4em 0}
+li{margin:.3em 0}
+nav{display:flex;align-items:center;gap:12px;padding:12px clamp(20px,7vw,110px);border-top:1px solid var(--line);background:var(--card)}
+nav button{font:inherit;font-weight:600;color:var(--ink);background:transparent;border:1.5px solid var(--ink);border-radius:6px;padding:6px 16px;cursor:pointer}
+nav button:hover{background:var(--ink);color:var(--bg)}
+nav button:focus-visible{outline:3px solid var(--b);outline-offset:2px}
+nav span{margin-left:auto;color:var(--mute);font-size:.9em}
+</style>
+</head>
+<body>
+<main class="deck" id="deck">
+
+<section class="slide on">
+<h1>Will this student pass?</h1>
+<p class="sub">ML course final project. You get one dataset and two questions. Answer both with the tools we learned in class.</p>
+<div class="q"><strong>Your job:</strong> act as a data scientist for a university and build models that predict a student's final score and whether they pass.</div>
+</section>
+
+<section class="slide">
+<h2>The scenario</h2>
+<p>The university wants an early-warning system. By week 8, the advisor knows how many hours a student studies, how often they attend, and a few other facts. Can we spot who will struggle <em>before</em> the exam?</p>
+<div class="cols">
+<div class="box"><h3>Part A: how much?</h3><p>Predict the exact <code>final_score</code> (0 to 100). This is regression.</p></div>
+<div class="box b"><h3>Part B: yes or no?</h3><p>Predict <code>passed</code> (1 if the score is 55 or more). This is classification.</p></div>
+</div>
+</section>
+
+<section class="slide">
+<h2>The data: 500 students</h2>
+<div class="tw"><table>
+<tr><th>Column</th><th>Meaning</th><th>Type</th></tr>
+<tr><td><code>study_hours_week</code></td><td>Hours studied per week</td><td>number</td></tr>
+<tr><td><code>attendance_pct</code></td><td>Lectures attended</td><td>number</td></tr>
+<tr><td><code>prev_gpa</code></td><td>GPA last semester (1 to 4)</td><td>number</td></tr>
+<tr><td><code>sleep_hours</code></td><td>Average nightly sleep</td><td>number</td></tr>
+<tr><td><code>assignments_done_pct</code></td><td>Assignments submitted</td><td>number</td></tr>
+<tr><td><code>part_time_job</code></td><td>1 = has a job</td><td>0/1</td></tr>
+<tr><td><code>final_score</code></td><td>Target for Part A</td><td>number</td></tr>
+<tr><td><code>passed</code></td><td>Target for Part B</td><td>0/1</td></tr>
+</table></div>
+<p class="sub">File: <code>student_performance.csv</code>. A few <code>prev_gpa</code> and <code>sleep_hours</code> values are missing on purpose. Handle them and explain how.</p>
+</section>
+
+<section class="slide">
+<h2>Part A: predict the score</h2>
+<ul>
+<li>Fit a <strong>linear regression</strong> on all features.</li>
+<li>Fit a <strong>polynomial regression</strong>. Hint: plot <code>study_hours_week</code> against <code>final_score</code> first. Does the 20th hour help as much as the 2nd?</li>
+<li>Choose the polynomial degree with <strong>k-fold cross-validation</strong>, not by guessing.</li>
+<li>Report <strong>RMSE</strong> and <strong>R&sup2;</strong> on the test set. Which model wins, and why?</li>
+</ul>
+</section>
+
+<section class="slide">
+<h2>Part B: predict pass or fail</h2>
+<div class="cols">
+<div class="box"><h3>Logistic regression</h3><p>Tune the regularization strength <code>C</code>.</p></div>
+<div class="box"><h3>K-nearest neighbors</h3><p>Tune <code>k</code>. Scale features first. Say why scaling matters here.</p></div>
+<div class="box"><h3>Decision tree</h3><p>Tune <code>max_depth</code>. Show the tree and name the top split.</p></div>
+</div>
+<ul>
+<li>Report accuracy, precision, recall, F1 and a <strong>confusion matrix</strong> for each model.</li>
+<li>About 30% of students fail. Explain why accuracy alone can mislead.</li>
+</ul>
+</section>
+
+<section class="slide">
+<h2>Rules of the method</h2>
+<ul>
+<li>Split train and test <strong>once</strong>, with a fixed <code>random_state</code>. Never tune on the test set.</li>
+<li>Fit the scaler and any imputer on the training data only. Then apply them to the test data.</li>
+<li>Use <strong>5-fold cross-validation</strong> and <code>GridSearchCV</code> for every hyperparameter you tune.</li>
+<li>Keep one table comparing all models on the same test set.</li>
+<li>Finish with a recommendation: which model would you give the university, and what would you improve next?</li>
+</ul>
+</section>
+
+<section class="slide">
+<h2>What to hand in</h2>
+<div class="cols">
+<div class="box"><h3>1. Notebook</h3><p>Clean, runs top to bottom, short comments in plain words.</p></div>
+<div class="box"><h3>2. Summary slides</h3><p>Five slides: problem, data insight, results table, best model, next steps.</p></div>
+</div>
+<div class="tw"><table>
+<tr><th>Grading</th><th>Points</th></tr>
+<tr><td>Data preparation and exploration</td><td>15</td></tr>
+<tr><td>Part A: regression</td><td>25</td></tr>
+<tr><td>Part B: classification</td><td>30</td></tr>
+<tr><td>Cross-validation and tuning</td><td>15</td></tr>
+<tr><td>Clarity of slides and conclusions</td><td>15</td></tr>
+</table></div>
+</section>
+
+</main>
+<nav>
+<button id="prev">Previous</button>
+<button id="next">Next</button>
+<span id="count"></span>
+</nav>
+<script>
+(function(){
+var s=document.querySelectorAll('.slide'),i=0,c=document.getElementById('count'),d=document.getElementById('deck');
+function show(n){i=Math.max(0,Math.min(s.length-1,n));s.forEach(function(e,k){e.classList.toggle('on',k===i)});c.textContent=(i+1)+' / '+s.length;d.scrollTop=0}
+document.getElementById('prev').onclick=function(){show(i-1)};
+document.getElementById('next').onclick=function(){show(i+1)};
+document.addEventListener('keydown',function(e){if(e.key==='ArrowRight'||e.key===' ')show(i+1);if(e.key==='ArrowLeft')show(i-1)});
+show(0);
+})();
+</script>
+</body>
+</html>
